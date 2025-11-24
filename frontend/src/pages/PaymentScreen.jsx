@@ -156,35 +156,38 @@ const PaymentsScreen = () => {
     if (loading) return <h2>Завантаження...</h2>;
     if (error) return <h2 className='ErrorText'>{error}</h2>;
 
-    return (
-        <div className="PaymentsScreenContainer">
-            <h2>Управління оплатами</h2>
+    const inputClass = "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 mb-4";
+    const labelClass = "block text-gray-700 text-sm font-bold mb-2";
+    const cardClass = "bg-white rounded-2xl shadow-lg p-8 border border-gray-100 h-full";
 
-            <div className="PaymentLayout" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-                
-                <div className="CreationFormSection" style={{ flex: 1, minWidth: '300px' }}>
-                    <h3>Додати оплату</h3>
+    return (
+        <div className="min-h-[85vh] bg-gray-50 p-8 max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-800 mb-8 border-l-4 border-primary pl-4">Управління оплатами</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                <div className={cardClass}>
+                    <h3 className="text-xl font-bold text-gray-700 mb-6 flex items-center">Додати оплату</h3>
                     {creationStatus && (
                         <p className={creationStatus.type === 'error' ? 'ErrorText' : 'SuccessText'}>
                             {creationStatus.message}
                         </p>
                     )}
-                    <form onSubmit={createPaymentHandler} className="PaymentForm">
+                    <form onSubmit={createPaymentHandler}>
                         
-                        <label>Студент:</label>
-                        <select value={selectedStudent} onChange={(e) => setSelectedStudent(e.target.value)} required>
+                        <label className={labelClass}>Студент:</label>
+                        <select value={selectedStudent} onChange={(e) => setSelectedStudent(e.target.value)} required className={inputClass}>
                             <option value="">-- Оберіть студента --</option>
                             {students.map((s) => (
                                 <option key={s._id} value={s._id}>{s.name} ({s.email})</option>
                             ))}
                         </select>
 
-                        <label>Курс (із записаних):</label>
+                        <label className={labelClass}>Курс (із записаних):</label>
                         <select 
                             value={selectedCourse} 
                             onChange={(e) => setSelectedCourse(e.target.value)} 
                             required 
                             disabled={!selectedStudent}
+                            className={inputClass}
                         >
                             <option value="">-- Оберіть курс --</option>
                             {availableCourses.length === 0 && selectedStudent && <option disabled>Студент не записаний на жоден курс</option>}
@@ -193,76 +196,80 @@ const PaymentsScreen = () => {
                             ))}
                         </select>
 
-                        <label>Сума (UAH):</label>
+                        <label className={labelClass}>Сума, грн:</label>
                         <input 
                             type="number" 
                             placeholder="Сума" 
                             value={amount} 
                             onChange={(e) => setAmount(e.target.value)} 
-                            required 
+                            required
+                            className={inputClass}
                         />
 
-                        <label>Метод:</label>
-                        <select value={method} onChange={(e) => setMethod(e.target.value)}>
+                        <label className={labelClass}>Метод:</label>
+                        <select value={method} onChange={(e) => setMethod(e.target.value)} className={inputClass}>
                             <option value="Transfer">Банківський переказ</option>
                             <option value="Card">Картка</option>
                             <option value="Cash">Готівка</option>
                         </select>
 
-                        <button type="submit">Зберегти Оплату</button>
+                        <button type="submit" className="w-full bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition duration-300 shadow-md mt-2">Зберегти Оплату</button>
                     </form>
                 </div>
 
                 {selectedStudent && selectedCourse && (
-                    <div className="DebtInfoSection" style={{ flex: 1, minWidth: '300px', background: '#f9f9f9', padding: '15px', borderRadius: '8px' }}>
-                        <h3>Інформація по курсу</h3>
-                        <div style={{ marginBottom: '15px' }}>
-                            <p><strong>Ціна за заняття:</strong> {studentUnpaidLessons[0]?.price} грн</p>
-                            <p><strong>Пройдено занять:</strong> {studentUnpaidLessons.length}</p>
-                            <hr />
-                            <p>Нараховано: <strong>{stats.totalCost} грн</strong></p>
-                            <p>Сплачено всього: <strong>{stats.totalPaid} грн</strong></p>
-                            <p style={{ color: stats.balance < 0 ? 'red' : 'green', fontWeight: 'bold' }}>
-                                {stats.balance < 0 ? `Борг: ${stats.balance} грн` : `Баланс: +${stats.balance} грн`}
-                            </p>
+                    <div className={cardClass}>
+                        <h3 className="text-xl font-bold text-gray-700 mb-6 flex items-center">Інформація по курсу</h3>
+                        <div className="flex flex-col h-full">
+                            <div className="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
+                                <p>Ціна за заняття: {studentUnpaidLessons[0]?.price} грн</p>
+                                <p>Пройдено занять: {studentUnpaidLessons.length}</p>
+                                <hr />
+                                <p>Нараховано: {stats.totalCost} грн</p>
+                                <p>Сплачено всього: {stats.totalPaid} грн</p>
+                                <p className={`flex justify-between items-center p-4 rounded-lg border-2 ${stats.balance < 0 ? 'bg-red-200 border-red-200' : 'bg-green-200 border-green-200'}`}>
+                                    {stats.balance < 0 ? `Борг: ${stats.balance} грн` : `Баланс: +${stats.balance} грн`}
+                                </p>
+                            </div>
+                            <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Список пройдених занять:</h4>
+                            <ul className="space-y-2">
+                                {studentUnpaidLessons.map(lesson => (
+                                    <li key={lesson._id} className="bg-white p-3 rounded shadow-sm flex justify-between items-center text-sm border border-gray-100">
+                                        {new Date(lesson.dateTime).toLocaleDateString()} — {lesson.topic || 'Без теми'}
+                                    </li>
+                                ))}
+                                {studentUnpaidLessons.length === 0 && <li className="text-gray-400 text-center py-4 italic">Занять ще не було</li>}
+                            </ul>
                         </div>
-
-                        <h4>Список пройдених занять:</h4>
-                        <ul style={{ maxHeight: '200px', overflowY: 'auto', fontSize: '0.9rem' }}>
-                            {studentUnpaidLessons.map(lesson => (
-                                <li key={lesson._id}>
-                                    {new Date(lesson.dateTime).toLocaleDateString()} — {lesson.topic || 'Без теми'}
-                                </li>
-                            ))}
-                            {studentUnpaidLessons.length === 0 && <li>Занять ще не було</li>}
-                        </ul>
                     </div>
                 )}
             </div>
             
-            <h3>Історія всіх транзакцій</h3>
-            <table className="PaymentsTable">
-                <thead>
-                    <tr>
-                        <th>Дата</th>
-                        <th>Студент</th>
-                        <th>Курс</th>
-                        <th>Сума</th>
-                        <th>Метод</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {payments.map((p) => (
-                        <tr key={p._id}>
-                            <td>{new Date(p.paymentDate).toLocaleDateString()}</td>
-                            <td>{p.student ? p.student.name : 'Видалений'}</td>
-                            <td>{p.course ? p.course.title : 'Видалений'}</td>
-                            <td>{p.amountPaid} грн</td>
-                            <td>{p.paymentMethod}</td>
+            <section className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+                <h3 className="text-lg font-bold text-gray-700">Історія всіх транзакцій</h3>
+                <table className="w-full text-left border-collapse">
+                    <thead>
+                        <tr className="bg-secondary text-gray-700 uppercase text-xs tracking-wider">
+                            <th className="p-4 font-semibold">Дата</th>
+                            <th className="p-4 font-semibold">Студент</th>
+                            <th className="p-4 font-semibold">Курс</th>
+                            <th className="p-4 font-semibold">Сума</th>
+                            <th className="p-4 font-semibold">Метод</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                        {payments.map((p) => (
+                            <tr key={p._id} className="hover:bg-purple-50 transition duration-150">
+                                <td className="p-4 text-gray-600 text-sm">{new Date(p.paymentDate).toLocaleDateString()}</td>
+                                <td className="p-4 font-bold text-gray-800">{p.student ? p.student.name : 'Видалений'}</td>
+                                <td className="p-4 font-bold text-gray-800">{p.course ? p.course.title : 'Видалений'}</td>
+                                <td className="p-4 font-bold text-gray-800">{p.amountPaid} грн</td>
+                                <td className="p-4 font-bold text-gray-800">{p.paymentMethod}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </section>
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const AdminDashboard = () => {
@@ -21,18 +21,64 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="DashboardContainer">
-            <h2>Адміністративна Панель STEAM City</h2>
-            <p>Вітаємо, {state.user.name} ({state.user.email})!</p>
+        <div className="min-h-[85vh] bg-gray-50 p-8 max-w-7xl mx-auto">
+            <div className="mb-10 text-center">
+                <h2 className="text-4xl font-bold text-primary mb-3">
+                    Адміністративна Панель
+                </h2>
+                <p className="text-xl text-gray-600">
+                    Вітаємо, <span className="font-semibold text-black">{state.user.name}</span>!
+                </p>
+            </div>
             
-            <section className="AdminModules">
-                <h3>Управління Системою</h3>
-                <ul>
-                    <li><a href="/admin/users">Адміністрування користувачів</a></li>
-                    <li><a href="/admin/groups">Керування курсами та групами</a></li>
-                    <li><a href="/admin/payments">Облік оплат та фінансова звітність</a></li>
-                    <li><a href="/schedule">Загальний розклад</a></li>
-                </ul>
+            <section>
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 pl-2 border-l-4 border-accent">Управління Системою</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">   
+                    <Link to="/admin/users" className="group bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
+                        <div className="flex items-center space-x-4">
+                            <div className="text-4xl bg-secondary p-4 rounded-full group-hover:bg-primary group-hover:text-white transition-colors">
+                                    👥
+                            </div>
+                            <div>
+                                <h4 className="text-2xl font-bold text-gray-800 group-hover:text-primary transition-colors">Користувачі</h4>
+                                <p className="text-gray-500 mt-1">Створення, блокування та редагування</p>
+                            </div>
+                        </div>
+                    </Link>
+                    <Link to="/admin/groups" className="group bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
+                        <div className="flex items-center space-x-4">
+                            <div className="text-4xl bg-secondary p-4 rounded-full group-hover:bg-primary group-hover:text-white transition-colors">
+                                📚
+                            </div>
+                            <div>
+                                <h4 className="text-2xl font-bold text-gray-800 group-hover:text-primary transition-colors">Курси та Групи</h4>
+                                <p className="text-gray-500 mt-1">Формування груп та навчальних програм</p>
+                            </div>
+                        </div>
+                    </Link>
+                    <Link to="/admin/payments" className="group bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
+                        <div className="flex items-center space-x-4">
+                            <div className="text-4xl bg-secondary p-4 rounded-full group-hover:bg-primary group-hover:text-white transition-colors">
+                                💰
+                            </div>
+                            <div>
+                                <h4 className="text-2xl font-bold text-gray-800 group-hover:text-primary transition-colors">Фінанси</h4>
+                                <p className="text-gray-500 mt-1">Облік оплат та фінансова звітність</p>
+                            </div>
+                        </div>
+                    </Link>
+                    <Link to="/schedule" className="group bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
+                        <div className="flex items-center space-x-4">
+                            <div className="text-4xl bg-secondary p-4 rounded-full group-hover:bg-primary group-hover:text-white transition-colors">
+                                📅
+                            </div>
+                            <div>
+                                <h4 className="text-2xl font-bold text-gray-800 group-hover:text-primary transition-colors">Загальний Розклад</h4>
+                                <p className="text-gray-500 mt-1">Календар занять усіх груп</p>
+                            </div>
+                        </div>
+                    </Link>
+                </div>
             </section>
         </div>
     );
