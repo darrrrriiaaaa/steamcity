@@ -102,7 +102,7 @@ const GroupScreen = () => {
         e.preventDefault();
         setFormError(null);
         if (!newGroupName || !selectedCourseId || !selectedTeacherId || selectedStudents.length === 0) {
-             return setFormError('Заповніть усі поля та додайте хоча б одного студента.');
+             return setFormError('Заповніть усі поля та додайте хоча б одного учня.');
         }
         
         try {
@@ -146,7 +146,7 @@ const GroupScreen = () => {
 
     return (
         <div className="min-h-[85vh] bg-gray-50 p-8 max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8 border-l-4 border-primary pl-4">Керування Курсами та Групами</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-8 border-l-4 border-primary pl-4">Керування курсами та групами</h2>
             {formError && <p className='ErrorText'>{formError}</p>}
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
@@ -175,10 +175,10 @@ const GroupScreen = () => {
                 </section>
             
                 <section className={`${cardClass} lg:col-span-2`}>
-                    <h3 className="text-xl font-bold text-gray-700 mb-6 flex items-center">Створити Нову Групу</h3>
+                    <h3 className="text-xl font-bold text-gray-700 mb-6 flex items-center">Створити нову групу</h3>
                     <form onSubmit={createGroupHandler}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <label className={labelClass}>Назва Групи</label>
+                            <label className={labelClass}>Назва групи</label>
                             <input
                                 type="text"
                                 value={newGroupName} 
@@ -194,12 +194,12 @@ const GroupScreen = () => {
                             </select>
                             <label className={labelClass}>Викладач:</label>
                             <select value={selectedTeacherId} onChange={(e) => setSelectedTeacherId(e.target.value)} required className={inputClass}>
-                                <option value="">-- Виберіть викладача --</option>
+                                <option value="">Виберіть викладача</option>
                                 {teachers.map((t) => (
                                     <option key={t._id} value={t._id}>{t.name} ({t.email})</option>
                                 ))}
                             </select>
-                            <label className={`${labelClass} mt-4`}>Вибір студентів (всього: {students.length})</label>
+                            <label className={`${labelClass} mt-4`}>Вибір учнів (всього: {students.length})</label>
                             <div className="border border-gray-200 rounded-lg p-4 h-48 overflow-y-auto mb-6 bg-gray-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                                 {students.map((s) => (
                                     <div key={s._id} onClick={() => toggleStudentSelection(s._id)}
@@ -217,7 +217,7 @@ const GroupScreen = () => {
                 </section>
             </div>
             <section className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-                <h3 className="text-lg font-bold text-gray-700">Активні Групи ({groups.length})</h3>
+                <h3 className="text-lg font-bold text-gray-700">Активні групи ({groups.length})</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
@@ -225,7 +225,7 @@ const GroupScreen = () => {
                                 <th className="p-4 font-semibold">Група</th>
                                 <th className="p-4 font-semibold">Курс</th>
                                 <th className="p-4 font-semibold">Викладач</th>
-                                <th className="p-4 font-semibold">Студенти</th>
+                                <th className="p-4 font-semibold">Учні</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -241,7 +241,7 @@ const GroupScreen = () => {
                                                     <p key={s._id} className="bg-green-50 text-green-700 border border-green-200 px-2 py-1 rounded-md text-xs font-medium whitespace-nowrap">{s.name}</p>
                                                 ))
                                             ) : (
-                                                <p className="text-gray-400 text-xs italic">Немає студентів</p>
+                                                <p className="text-gray-400 text-xs italic">Немає учнів</p>
                                             )}
                                         </div>
                                     </td>

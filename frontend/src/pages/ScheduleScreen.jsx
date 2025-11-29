@@ -102,7 +102,7 @@ const ScheduleScreen = () => {
             case 'teacher':
                 return `Мій розклад занять, викладач ${user.name}`;
             case 'student':
-                return `Мій розклад занять, студент ${user.name}`;
+                return `Мій розклад занять, учень ${user.name}`;
             default:
                 return 'Розклад';
         }
@@ -202,7 +202,7 @@ const ScheduleScreen = () => {
                                     <td className="p-4">
                                         {lesson.group.students && lesson.group.students.length > 0 
                                             ? lesson.group.students.map(s => s.name).join(', ') 
-                                            : 'Немає студентів'}
+                                            : 'Немає учнів'}
                                     </td>
                                     {userRole !== 'teacher' && <td>{lesson.group.teacher.name}</td>}
                                     <td className="p-4">{lesson.group.course.title}</td>

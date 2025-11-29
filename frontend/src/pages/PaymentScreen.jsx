@@ -173,9 +173,9 @@ const PaymentsScreen = () => {
                     )}
                     <form onSubmit={createPaymentHandler}>
                         
-                        <label className={labelClass}>Студент:</label>
+                        <label className={labelClass}>Учень:</label>
                         <select value={selectedStudent} onChange={(e) => setSelectedStudent(e.target.value)} required className={inputClass}>
-                            <option value="">-- Оберіть студента --</option>
+                            <option value="">Оберіть учня</option>
                             {students.map((s) => (
                                 <option key={s._id} value={s._id}>{s.name} ({s.email})</option>
                             ))}
@@ -190,7 +190,7 @@ const PaymentsScreen = () => {
                             className={inputClass}
                         >
                             <option value="">-- Оберіть курс --</option>
-                            {availableCourses.length === 0 && selectedStudent && <option disabled>Студент не записаний на жоден курс</option>}
+                            {availableCourses.length === 0 && selectedStudent && <option disabled>Учень не записаний на жоден курс</option>}
                             {availableCourses.map((c) => (
                                 <option key={c._id} value={c._id}>{c.title} ({c.pricePerHour} грн/зан)</option>
                             ))}
@@ -251,7 +251,7 @@ const PaymentsScreen = () => {
                     <thead>
                         <tr className="bg-secondary text-gray-700 uppercase text-xs tracking-wider">
                             <th className="p-4 font-semibold">Дата</th>
-                            <th className="p-4 font-semibold">Студент</th>
+                            <th className="p-4 font-semibold">Учень</th>
                             <th className="p-4 font-semibold">Курс</th>
                             <th className="p-4 font-semibold">Сума</th>
                             <th className="p-4 font-semibold">Метод</th>

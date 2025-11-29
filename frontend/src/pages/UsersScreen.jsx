@@ -117,7 +117,7 @@ const UsersScreen = () => {
                     <input type="text" placeholder="Ім'я" value={name} onChange={(e) => setName(e.target.value)} required className={inputClass}/>
                     <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required className={inputClass}/>
                     <select value={role} onChange={(e) => setRole(e.target.value)} className={inputClass}>
-                        <option value="student">Студент</option>
+                        <option value="student">Учень</option>
                         <option value="teacher">Викладач</option>
                         <option value="admin">Адміністратор</option>
                     </select>
