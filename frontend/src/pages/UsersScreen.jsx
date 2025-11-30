@@ -88,7 +88,6 @@ const UsersScreen = () => {
     };
 
     const inputClass = "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200";
-    const labelClass = "block text-gray-700 text-sm font-bold mb-2";
 
     const getRoleBadgeColor = (role) => {
         switch(role) {
@@ -98,16 +97,18 @@ const UsersScreen = () => {
         }
     };
 
-    if (loading) return <h2>Завантаження користувачів...</h2>;
-    if (error) return <h2 className='ErrorText'>Помилка: {error}</h2>;
+    if (loading) return <div className="text-center mt-20 text-2xl text-primary font-bold">Завантаження користувачів...</div>;
+    if (error) return <div className="text-center mt-20 text-2xl text-red-500 font-bold">{error}</div>;
     if (!user || user.role !== 'admin') return null;
 
     return (
-        <div className="min-h-[85vh] bg-gray-50 p-8 max-w-7xl mx-auto">
+        <div className="min-h-[85vh] bg-gray-50 p-4 md:p-8 max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-800 mb-8 border-l-4 border-primary pl-4">Управління користувачами</h2>
 
             <div className="bg-white rounded-2xl shadow-lg p-8 mb-10 border border-gray-100">
-                <h3 className="text-xl font-bold text-gray-700 mb-6 flex items-center">Створити нового користувача</h3>
+                <h3 className="text-xl font-bold text-gray-700 mb-6 flex items-center">
+                    Створити нового користувача
+                </h3>
                 {creationStatus && (
                     <p className={`mb-6 p-4 rounded-lg border ${creationStatus.type === 'error' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}`}>
                         {creationStatus.message}
@@ -127,7 +128,10 @@ const UsersScreen = () => {
             </div>
             
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-                <h3 className="text-lg font-bold text-gray-700">Список усіх користувачів</h3>
+                <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                    <h3 className="text-lg font-bold text-gray-700">Список усіх користувачів ({users.length})</h3>
+                </div>
+                
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
@@ -137,7 +141,7 @@ const UsersScreen = () => {
                                 <th className="p-4 font-semibold">Email</th>
                                 <th className="p-4 font-semibold">Роль</th>
                                 <th className="p-4 font-semibold">Статус</th>
-                                <th className="p-4 font-semibold">Дії</th>
+                                <th className="p-4 font-semibold text-right">Дії</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -146,13 +150,25 @@ const UsersScreen = () => {
                                     <td className="p-4 text-gray-500 font-mono text-xs">{u._id.substring(18)}...</td>
                                     <td className="p-4 font-medium text-gray-900">{u.name}</td>
                                     <td className="p-4 text-gray-600">{u.email}</td>
-                                    <td className="p-4">{u.role}</td>
-                                    <td className="p-4">{u.isActive ? 'Активний' : 'Заблокований'}</td>
+                                    
                                     <td className="p-4">
+                                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getRoleBadgeColor(u.role)}`}>
+                                            {u.role === 'student' ? 'Учень' : u.role === 'teacher' ? 'Викладач' : 'Адмін'}
+                                        </span>
+                                    </td>
+
+                                    <td className="p-4">
+                                        <span className={`flex items-center gap-2 ${u.isActive ? 'text-green-600' : 'text-red-500'} font-medium text-sm`}>
+                                            <span className={`w-2 h-2 rounded-full ${u.isActive ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                                            {u.isActive ? 'Активний' : 'Блок'}
+                                        </span>
+                                    </td>
+                                    
+                                    <td className="p-4 text-right">
                                         {u._id !== user._id && (
                                             <button 
                                                 onClick={() => deleteUserHandler(u._id)} 
-                                                className={`text-sm font-semibold px-4 py-2 rounded-lg transition-colors 
+                                                className={`text-xs font-semibold px-3 py-2 rounded-lg transition-colors 
                                                     ${u.isActive ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}
                                                     ${u.role === 'admin' ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                 disabled={u.role === 'admin'}
