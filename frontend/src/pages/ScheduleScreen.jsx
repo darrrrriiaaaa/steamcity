@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
+const API_URL = process.env.SERVER_API_URL || 'http://localhost:5000';
+
 const ScheduleScreen = () => {
     const [groups, setGroups] = useState([]);
     const [schedule, setSchedule] = useState([]);
@@ -34,14 +36,14 @@ const ScheduleScreen = () => {
 
         try {
             if (userRole === 'admin') {
-                const groupsRes = await axios.get('http://localhost:5000/api/groups', config);
+                const groupsRes = await axios.get(`${API_URL}/api/groups`, config);
                 setGroups(groupsRes.data);
                 if (groupsRes.data.length > 0) {
                     setSelectedGroupId(groupsRes.data[0]._id);
                 }
             }
             
-            const scheduleRes = await axios.get('http://localhost:5000/api/schedule', config);
+            const scheduleRes = await axios.get(`${API_URL}/api/schedule`, config);
             setSchedule(scheduleRes.data);
 
             setLoading(false);
@@ -72,7 +74,7 @@ const ScheduleScreen = () => {
             };
             
             await axios.post(
-                'http://localhost:5000/api/schedule',
+                `${API_URL}/api/schedule`,
                 { 
                     group: selectedGroupId,
                     date: date,

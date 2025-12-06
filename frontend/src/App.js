@@ -1,4 +1,4 @@
-import './App.css';
+import './index.css';
 import logo from './images/logo.jpg';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -7,6 +7,8 @@ import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import Main from './pages/Main';
+import About from './pages/About';
+import Contacts from './pages/Contacts';
 import Login from './pages/Login';
 
 import AdminDashboard from './pages/AdminDashboard';
@@ -22,6 +24,8 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Main />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/contacts' element={<Contacts />} />
           <Route path='/authorize' element={<Login />} />
 
           <Route path='/dashboard/admin' element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />

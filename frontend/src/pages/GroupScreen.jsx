@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
+const API_URL = process.env.SERVER_API_URL || 'http://localhost:5000';
+
 const GroupScreen = () => {
     const [courses, setCourses] = useState([]);
     const [teachers, setTeachers] = useState([]);
@@ -25,6 +27,8 @@ const GroupScreen = () => {
     const [selectedTeacherId, setSelectedTeacherId] = useState('');
     const [selectedStudents, setSelectedStudents] = useState([]);
     
+    console.log("Поточний користувач:", user);
+    
     useEffect(() => {
         if (!user || user.role !== 'admin') {
             navigate('/authorize');
@@ -32,7 +36,25 @@ const GroupScreen = () => {
     }, [user, navigate]);
 
     const fetchData = async () => {
-        if (!user || user.role !== 'admin') return;
+        if (!user || user.role !== 'admin') {
+        return (
+            <div className="min-h-[80vh] flex flex-col items-center justify-center bg-gray-50 px-4">
+                <div className="bg-white p-8 rounded-2xl shadow-lg text-center max-w-md border border-gray-100">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Доступ заборонено</h2>
+                    <p className="text-gray-600 mb-6">
+                        Ця сторінка доступна лише адміністраторам. <br/>
+                        Ваша роль: <span className="font-bold text-primary">{user ? user.role : 'Гість'}</span>
+                    </p>
+                    <button 
+                        onClick={() => navigate('/')}
+                        className="bg-primary text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition shadow-md"
+                    >
+                        Повернутися на головну
+                    </button>
+                </div>
+            </div>
+        );
+        };
 
         setLoading(true);
         setError(null);
@@ -42,16 +64,16 @@ const GroupScreen = () => {
         };
 
         try {
-            const coursesRes = await axios.get('http://localhost:5000/api/groups/courses', config);
+            const coursesRes = await axios.get(`${API_URL}/api/groups/courses`, config);
             setCourses(coursesRes.data);
 
-            const groupsRes = await axios.get('http://localhost:5000/api/groups', config);
+            const groupsRes = await axios.get(`${API_URL}/api/groups`, config);
             setGroups(groupsRes.data);
 
-            const teachersRes = await axios.get('http://localhost:5000/api/users?role=teacher', config);
+            const teachersRes = await axios.get(`${API_URL}/api/users?role=teacher`, config);
             setTeachers(teachersRes.data);
 
-            const studentsRes = await axios.get('http://localhost:5000/api/users?role=student', config);
+            const studentsRes = await axios.get(`${API_URL}/api/users?role=student`, config);
             setStudents(studentsRes.data);
             
             if (coursesRes.data.length > 0) {
@@ -81,7 +103,7 @@ const GroupScreen = () => {
                 headers: { Authorization: `Bearer ${user.token}` },
             };
             await axios.post(
-                'http://localhost:5000/api/groups/courses',
+                `${API_URL}/api/groups/courses`,
                 { 
                     title: newCourseTitle, 
                     description: `Автоматично створений курс ${newCourseTitle}`,
@@ -111,7 +133,7 @@ const GroupScreen = () => {
             };
             
             await axios.post(
-                'http://localhost:5000/api/groups',
+                `${API_URL}/api/groups`,
                 { 
                     name: newGroupName, 
                     course: selectedCourseId,

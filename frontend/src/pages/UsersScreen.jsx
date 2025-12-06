@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
+const API_URL = process.env.SERVER_API_URL || 'http://localhost:5000';
+
 const UsersScreen = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,11 +20,7 @@ const UsersScreen = () => {
     const navigate = useNavigate();
     const { user } = state;
 
-    useEffect(() => {
-        if (!user || user.role !== 'admin') {
-            navigate('/authorize');
-        }
-    }, [user, navigate]);
+    console.log("Поточний користувач:", user);
 
     const fetchUsers = async () => {
         if (user && user.role === 'admin') {
@@ -34,7 +32,7 @@ const UsersScreen = () => {
                     },
                 };
 
-                const { data } = await axios.get('http://localhost:5000/api/users', config); 
+                const { data } = await axios.get(`${API_URL}/api/users`, config); 
                 
                 setUsers(data);
                 setLoading(false);
@@ -62,7 +60,7 @@ const UsersScreen = () => {
             };
             
             await axios.post(
-                'http://localhost:5000/api/auth/register',
+                `${API_URL}/api/auth/register`,
                 { name, email, password, role },
                 config
             );
@@ -99,7 +97,25 @@ const UsersScreen = () => {
 
     if (loading) return <div className="text-center mt-20 text-2xl text-primary font-bold">Завантаження користувачів...</div>;
     if (error) return <div className="text-center mt-20 text-2xl text-red-500 font-bold">{error}</div>;
-    if (!user || user.role !== 'admin') return null;
+    if (!user || user.role !== 'admin') {
+        return (
+            <div className="min-h-[80vh] flex flex-col items-center justify-center bg-gray-50 px-4">
+                <div className="bg-white p-8 rounded-2xl shadow-lg text-center max-w-md border border-gray-100">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Доступ заборонено</h2>
+                    <p className="text-gray-600 mb-6">
+                        Ця сторінка доступна лише адміністраторам. <br/>
+                        Ваша роль: <span className="font-bold text-primary">{user ? user.role : 'Гість'}</span>
+                    </p>
+                    <button 
+                        onClick={() => navigate('/')}
+                        className="bg-primary text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition shadow-md"
+                    >
+                        Повернутися на головну
+                    </button>
+                </div>
+            </div>
+        );
+    };
 
     return (
         <div className="min-h-[85vh] bg-gray-50 p-4 md:p-8 max-w-7xl mx-auto">

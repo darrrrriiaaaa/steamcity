@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+const API_URL = process.env.SERVER_API_URL || 'http://localhost:5000';
+
 const PaymentsScreen = () => {
     const [payments, setPayments] = useState([]);
     const [students, setStudents] = useState([]);
@@ -25,6 +27,8 @@ const PaymentsScreen = () => {
     const navigate = useNavigate();
     const { user } = state;
 
+    console.log("Поточний користувач:", user);
+
     useEffect(() => {
         if (!user || user.role !== 'admin') {
             navigate('/authorize');
@@ -43,10 +47,10 @@ const PaymentsScreen = () => {
             setError(null);
 
             const [payRes, studRes, groupRes, schedRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/payments', config),
-                axios.get('http://localhost:5000/api/users?role=student', config),
-                axios.get('http://localhost:5000/api/groups', config),
-                axios.get('http://localhost:5000/api/schedule', config)
+                axios.get(`${API_URL}/api/payments`, config),
+                axios.get(`${API_URL}/api/users?role=student`, config),
+                axios.get(`${API_URL}/api/groups`, config),
+                axios.get(`${API_URL}/api/schedule`, config)
             ]);
 
             setPayments(payRes.data);
@@ -117,7 +121,7 @@ const PaymentsScreen = () => {
 
         try {
             await axios.post(
-                'http://localhost:5000/api/payments',
+                `${API_URL}/api/payments`,
                 { 
                     student: selectedStudent, 
                     course: selectedCourse, 
@@ -152,7 +156,6 @@ const PaymentsScreen = () => {
 
     const stats = calculateBalance();
 
-    if (!user || user.role !== 'admin') return null;
     if (loading) return <h2>Завантаження...</h2>;
     if (error) return <h2 className='ErrorText'>{error}</h2>;
 
@@ -160,6 +163,26 @@ const PaymentsScreen = () => {
     const labelClass = "block text-gray-700 text-sm font-bold mb-2";
     const cardClass = "bg-white rounded-2xl shadow-lg p-8 border border-gray-100 h-full";
 
+    if (!user || user.role !== 'admin') {
+        return (
+            <div className="min-h-[80vh] flex flex-col items-center justify-center bg-gray-50 px-4">
+                <div className="bg-white p-8 rounded-2xl shadow-lg text-center max-w-md border border-gray-100">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Доступ заборонено</h2>
+                    <p className="text-gray-600 mb-6">
+                        Ця сторінка доступна лише адміністраторам. <br/>
+                        Ваша роль: <span className="font-bold text-primary">{user ? user.role : 'Гість'}</span>
+                    </p>
+                    <button 
+                        onClick={() => navigate('/')}
+                        className="bg-primary text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition shadow-md"
+                    >
+                        Повернутися на головну
+                    </button>
+                </div>
+            </div>
+        );
+    };
+    
     return (
         <div className="min-h-[85vh] bg-gray-50 p-8 max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-800 mb-8 border-l-4 border-primary pl-4">Управління оплатами</h2>
