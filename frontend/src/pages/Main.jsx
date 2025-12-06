@@ -2,15 +2,20 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import bgImage from '../images/room2.jpg';
 
-const Main = ({ }) => {
+const Main = () => {
     return (
-        <div className="h-[85vh] w-full bg-cover bg-[center_40%] relative" style={{ backgroundImage: `url(${bgImage})` }}>
-            <div className="absolute right-0 top-1/3 w-3/5 h-1/2 bg-white/80 backdrop-blur-sm rounded-l-[300px] flex flex-col items-center justify-center shadow-2xl p-10">
-                    <h1 className="text-5xl font-bold text-primary mb-4">Репетиторський центр STEAM City</h1>
-                    <p className="text-xl text-gray-700 max-w-lg text-center">Сучасна освіта для майбутнього!</p>
-                    <NavLink to="/about" className="mt-8 px-8 py-3 bg-primary text-white text-xl rounded-full hover:bg-accent hover:scale-105 transition-all shadow-lg inline-block">
-                        Дізнатись більше
-                    </NavLink>
+        <div className="relative w-full h-screen lg:h-[85vh] bg-cover bg-no-repeat bg-[center_30%]" style={{ backgroundImage: `url(${bgImage})` }}>
+            <div className="bg-white/90 backdrop-blur-sm shadow-2xl flex flex-col items-center justify-center text-center w-[90%] py-10 px-6 rounded-3xl
+            lg:absolute lg:right-0 lg:top-1/4 lg:bottom-auto lg:w-3/5 lg:h-1/2 lg:py-0 lg:px-10 lg:rounded-l-[300px] lg:rounded-r-none lg:bg-white/80">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-4 leading-tight">
+                    Репетиторський центр <br className="hidden sm:block" /> STEAM City
+                </h1>
+                <p className="text-base sm:text-lg lg:text-xl text-gray-700 max-w-lg text-center px-2">
+                    Сучасна освіта для майбутнього!
+                </p>
+                <NavLink to="/about" className="mt-6 lg:mt-8 px-8 py-3 bg-primary text-white text-lg lg:text-xl rounded-full hover:bg-opacity-90 hover:scale-105 transition-all shadow-lg inline-block">
+                    Дізнатись більше
+                </NavLink>
             </div>
         </div>
     )

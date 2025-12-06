@@ -9,7 +9,7 @@ const About = () => {
             
             <div className="relative bg-primary py-20 px-4 sm:px-6 lg:px-8 shadow-lg">
                 <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute inset-0 bg-primary mix-blend-multiply" />
+                    <div className="absolute inset-0 bg-primary" />
                 </div>
                 <div className="relative max-w-7xl mx-auto text-center">
                     <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
